@@ -1,5 +1,5 @@
 1. Overview
-This Repository contains user defined aggregation function of PostgreSQL which summation of 32bit floating points by SIMD(AVX256).
+This Repository contains an user defined aggregation function of PostgreSQL which summation of 32bit floating points by SIMD(AVX256).
 
 2. Prerequisites
 (1) OS is CentOS7
