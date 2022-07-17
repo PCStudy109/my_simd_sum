@@ -70,5 +70,5 @@ float4pl_simd(PG_FUNCTION_ARGS)
         }
     }
 
-	PG_RETURN_ARRAYTYPE_P(transarray);
+    PG_RETURN_ARRAYTYPE_P(transarray);
 }
