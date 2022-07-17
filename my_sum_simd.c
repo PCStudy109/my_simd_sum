@@ -31,13 +31,9 @@ float4sum_simd(PG_FUNCTION_ARGS)
     return Float4GetDatum(ret);
 }
 
-void add_simd(const float *v1, const float *v2, float *ret){
+void add_simd(float *v1, const float *v2){
     //A 256-bit vector in AVX
-    __m256 vec1 = _mm256_loadu_ps(v1);
-    __m256 vec2 = _mm256_loadu_ps(v2);
-    __m256 vec_ret = _mm256_loadu_ps(ret);
-    vec_ret = _mm256_add_ps(vec1, vec2); 
-    _mm256_storeu_ps(ret, vec_ret);
+    _mm256_storeu_ps(v1, _mm256_add_ps(_mm256_loadu_ps(v1), _mm256_loadu_ps(v2)));
 }
 
 Datum
@@ -60,14 +56,8 @@ float4pl_simd(PG_FUNCTION_ARGS)
     if(count < 8){
         transvalues[0] = count;
     } else {
-        int val_index = 0;
-        float4 ret[8] = {0};
-
-        add_simd(&(transvalues[1]), &(transvalues[9]), ret);
+        add_simd(&(transvalues[1]), &(transvalues[9]));
         transvalues[0] = 0;
-        for(val_index = 0; val_index < 8; val_index++){
-            transvalues[val_index + 1] = ret[val_index];
-        }
     }
 
     PG_RETURN_ARRAYTYPE_P(transarray);
